@@ -176,6 +176,7 @@
       width: 16px;
     }
 
+    /* Enhanced Social Buttons */
     .social-buttons {
       display: flex;
       gap: 0.75rem;
@@ -184,24 +185,67 @@
     }
 
     .btn-social {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
+      font-size: 1.2rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
     }
 
-    .btn-linkedin { background: #0077b5; color: white; }
-    .btn-github { background: #333; color: white; }
-    .btn-email { background: #ea4335; color: white; }
-    .btn-download { background: #28a745; color: white; }
+    .btn-social::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-social:hover::before {
+      left: 100%;
+    }
+
+    .btn-linkedin { 
+      background: linear-gradient(135deg, #0077b5, #005885);
+      color: white;
+      box-shadow: 0 4px 15px rgba(0, 119, 181, 0.3);
+    }
+
+    .btn-github { 
+      background: linear-gradient(135deg, #333, #1a1a1a);
+      color: white;
+      box-shadow: 0 4px 15px rgba(51, 51, 51, 0.3);
+    }
+
+    .btn-email { 
+      background: linear-gradient(135deg, #ea4335, #c23321);
+      color: white;
+      box-shadow: 0 4px 15px rgba(234, 67, 53, 0.3);
+    }
+
+    .btn-download { 
+      background: linear-gradient(135deg, #28a745, #1e7e34);
+      color: white;
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    }
 
     .btn-social:hover {
-      transform: translateY(-2px) scale(1.05);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-social:active {
+      transform: translateY(-1px) scale(1.02);
     }
 
     /* Content Section */
@@ -270,28 +314,58 @@
       gap: 0.5rem;
     }
 
+    /* Enhanced Project Cards */
+    .projects-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
     .project {
-      background: rgba(102, 126, 234, 0.05);
+      background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(102, 126, 234, 0.1);
-      border-radius: 15px;
+      border-radius: 16px;
       padding: 1.5rem;
-      margin-bottom: 1.5rem;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
     }
 
     .project:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
       border-color: rgba(102, 126, 234, 0.3);
     }
 
-    .project h3 {
-      margin-bottom: 0.75rem;
-      color: #2d3748;
-      font-size: 1.2rem;
+    .project-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .project h3 {
+      color: #2d3748;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .project-status {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
     }
 
     .project p {
@@ -300,66 +374,299 @@
       line-height: 1.6;
     }
 
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tech-tag {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
     .project-actions {
       display: flex;
       gap: 0.75rem;
     }
 
-    .skills {
+    /* Enhanced Skills Section */
+    .skills-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 2rem;
+    }
+
+    .skill-category {
+      background: rgba(102, 126, 234, 0.05);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid rgba(102, 126, 234, 0.1);
+    }
+
+    .skill-category h3 {
+      color: #2d3748;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .skills-grid {
+      display: grid;
       gap: 1rem;
     }
 
-    .skill {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      padding: 1rem 1.5rem;
+    .skill-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem;
+      background: white;
       border-radius: 12px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
       transition: all 0.3s ease;
-      cursor: pointer;
     }
 
-    .skill:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    .skill-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .skill-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex: 1;
+    }
+
+    .skill-icon {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .skill-details {
+      flex: 1;
+    }
+
+    .skill-name {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.25rem;
+    }
+
+    .skill-progress {
+      width: 100%;
+      height: 6px;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .skill-progress-bar {
+      height: 100%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      transition: width 1s ease-in-out;
+      border-radius: 3px;
+    }
+
+    .skill-level {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #667eea;
+      min-width: 3rem;
+      text-align: right;
+    }
+
+    /* Enhanced Experience Timeline */
+    .experience-timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .experience-timeline::before {
+      content: '';
+      position: absolute;
+      left: 0.75rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #667eea, #764ba2);
     }
 
     .experience-item {
-      border-left: 3px solid #667eea;
-      padding-left: 1.5rem;
-      margin-bottom: 2rem;
       position: relative;
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(102, 126, 234, 0.1);
+      transition: all 0.3s ease;
     }
 
     .experience-item::before {
       content: '';
       position: absolute;
-      left: -7px;
-      top: 0;
-      width: 12px;
-      height: 12px;
+      left: -2.5rem;
+      top: 1.5rem;
+      width: 16px;
+      height: 16px;
       background: #667eea;
       border-radius: 50%;
+      border: 4px solid white;
+      box-shadow: 0 0 0 2px #667eea;
+    }
+
+    .experience-item:hover {
+      transform: translateX(10px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .experience-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
     }
 
     .experience-item h3 {
       color: #2d3748;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
+      font-size: 1.2rem;
+    }
+
+    .experience-company {
+      color: #667eea;
+      font-weight: 500;
+      font-size: 0.95rem;
     }
 
     .experience-item .date {
+      background: rgba(102, 126, 234, 0.1);
       color: #667eea;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
       font-weight: 500;
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
     }
 
     .experience-item p {
       color: #718096;
+      line-height: 1.6;
+    }
+
+    /* Enhanced Contact Section */
+    .contact-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .contact-form {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #2d3748;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-control.error {
+      border-color: #e53e3e;
+    }
+
+    .error-message {
+      color: #e53e3e;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+    }
+
+    .contact-info-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-method {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .contact-method:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: white;
+    }
+
+    .contact-details h4 {
+      color: #2d3748;
+      margin-bottom: 0.25rem;
+    }
+
+    .contact-details p {
+      color: #718096;
+      font-size: 0.9rem;
     }
 
     /* Action Buttons */
@@ -378,6 +685,26 @@
       justify-content: center;
       flex-wrap: wrap;
       margin-top: 1.5rem;
+    }
+
+    /* Success/Error Messages */
+    .message {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .message.success {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .message.error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
     }
 
     /* Responsive Design */
@@ -410,8 +737,9 @@
         height: 120px;
       }
 
-      .skills {
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
       }
 
       .action-buttons {
@@ -421,6 +749,14 @@
 
       .btn {
         min-width: 200px;
+      }
+
+      .experience-timeline {
+        padding-left: 1rem;
+      }
+
+      .experience-item::before {
+        left: -1.5rem;
       }
     }
   </style>
@@ -478,19 +814,22 @@
           </div>
         </div>
 
+        <!-- TODO: Update these social media buttons with your actual URLs -->
+        <!-- Replace the '#' with your actual profile URLs -->
         <div class="social-buttons">
-          <button class="btn-social btn-linkedin" onclick="openLinkedIn()" title="LinkedIn">
+          <a href="#" class="btn-social btn-linkedin" target="_blank" title="LinkedIn Profile">
             <i class="fab fa-linkedin-in"></i>
-          </button>
-          <button class="btn-social btn-github" onclick="openGitHub()" title="GitHub">
+          </a>
+          <a href="#" class="btn-social btn-github" target="_blank" title="GitHub Profile">
             <i class="fab fa-github"></i>
-          </button>
-          <button class="btn-social btn-email" onclick="sendEmail()" title="Send Email">
+          </a>
+          <a href="mailto:anupkrvarma2222@gmail.com" class="btn-social btn-email" title="Send Email">
             <i class="fas fa-envelope"></i>
-          </button>
-          <button class="btn-social btn-download" onclick="downloadResume()" title="Download Resume">
+          </a>
+          <!-- TODO: Add your resume file to the project and update the href -->
+          <a href="#" class="btn-social btn-download" download title="Download Resume">
             <i class="fas fa-download"></i>
-          </button>
+          </a>
         </div>
       </div>
 
@@ -513,63 +852,80 @@
           <div class="section">
             <h2><i class="fas fa-project-diagram"></i> Featured Projects</h2>
             
-            <div class="project">
-              <h3>
-                AI Text Summarizer
-                <div>
-                  <button class="btn btn-outline" onclick="viewProject('ai-summarizer')">
-                    <i class="fas fa-external-link-alt"></i> View
-                  </button>
+            <div class="projects-grid">
+              <div class="project">
+                <div class="project-header">
+                  <div>
+                    <h3>AI Text Summarizer</h3>
+                    <div class="tech-stack">
+                      <span class="tech-tag">Python</span>
+                      <span class="tech-tag">Flask</span>
+                      <span class="tech-tag">OpenAI</span>
+                      <span class="tech-tag">NLP</span>
+                    </div>
+                  </div>
+                  <div class="project-status">Active</div>
                 </div>
-              </h3>
-              <p>Developed a Flask-based API using OpenAI to provide concise text summaries with advanced natural language processing capabilities.</p>
-              <div class="project-actions">
-                <button class="btn btn-primary" onclick="viewDemo('ai-summarizer')">
-                  <i class="fas fa-play"></i> Live Demo
-                </button>
-                <button class="btn btn-secondary" onclick="viewCode('ai-summarizer')">
-                  <i class="fab fa-github"></i> Source Code
-                </button>
+                <p>Developed a Flask-based API using OpenAI to provide concise text summaries with advanced natural language processing capabilities.</p>
+                <div class="project-actions">
+                  <!-- TODO: Replace '#' with actual demo and repository URLs -->
+                  <a href="#" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-play"></i> Live Demo
+                  </a>
+                  <a href="#" class="btn btn-secondary" target="_blank">
+                    <i class="fab fa-github"></i> Source Code
+                  </a>
+                </div>
               </div>
-            </div>
 
-            <div class="project">
-              <h3>
-                E-Commerce Platform
-                <div>
-                  <button class="btn btn-outline" onclick="viewProject('ecommerce')">
-                    <i class="fas fa-external-link-alt"></i> View
-                  </button>
+              <div class="project">
+                <div class="project-header">
+                  <div>
+                    <h3>E-Commerce Platform</h3>
+                    <div class="tech-stack">
+                      <span class="tech-tag">Python</span>
+                      <span class="tech-tag">JavaScript</span>
+                      <span class="tech-tag">MySQL</span>
+                      <span class="tech-tag">REST API</span>
+                    </div>
+                  </div>
+                  <div class="project-status">Completed</div>
                 </div>
-              </h3>
-              <p>Full-stack web application built with Python, JavaScript, and MySQL featuring user authentication, payment processing, and inventory management.</p>
-              <div class="project-actions">
-                <button class="btn btn-primary" onclick="viewDemo('ecommerce')">
-                  <i class="fas fa-play"></i> Live Demo
-                </button>
-                <button class="btn btn-secondary" onclick="viewCode('ecommerce')">
-                  <i class="fab fa-github"></i> Source Code
-                </button>
+                <p>Full-stack web application built with Python, JavaScript, and MySQL featuring user authentication, payment processing, and inventory management.</p>
+                <div class="project-actions">
+                  <!-- TODO: Replace '#' with actual demo and repository URLs -->
+                  <a href="#" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-play"></i> Live Demo
+                  </a>
+                  <a href="#" class="btn btn-secondary" target="_blank">
+                    <i class="fab fa-github"></i> Source Code
+                  </a>
+                </div>
               </div>
-            </div>
 
-            <div class="project">
-              <h3>
-                Cloud Infrastructure Manager
-                <div>
-                  <button class="btn btn-outline" onclick="viewProject('cloud-manager')">
-                    <i class="fas fa-external-link-alt"></i> View
-                  </button>
+              <div class="project">
+                <div class="project-header">
+                  <div>
+                    <h3>Cloud Infrastructure Manager</h3>
+                    <div class="tech-stack">
+                      <span class="tech-tag">AWS</span>
+                      <span class="tech-tag">Python</span>
+                      <span class="tech-tag">Docker</span>
+                      <span class="tech-tag">Terraform</span>
+                    </div>
+                  </div>
+                  <div class="project-status">In Progress</div>
                 </div>
-              </h3>
-              <p>Automated cloud resource management tool using AWS services with monitoring, scaling, and cost optimization features.</p>
-              <div class="project-actions">
-                <button class="btn btn-primary" onclick="viewDemo('cloud-manager')">
-                  <i class="fas fa-play"></i> Live Demo
-                </button>
-                <button class="btn btn-secondary" onclick="viewCode('cloud-manager')">
-                  <i class="fab fa-github"></i> Source Code
-                </button>
+                <p>Automated cloud resource management tool using AWS services with monitoring, scaling, and cost optimization features.</p>
+                <div class="project-actions">
+                  <!-- TODO: Replace '#' with actual demo and repository URLs -->
+                  <a href="#" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-play"></i> Live Demo
+                  </a>
+                  <a href="#" class="btn btn-secondary" target="_blank">
+                    <i class="fab fa-github"></i> Source Code
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -579,19 +935,207 @@
         <div id="skills" class="tab-content">
           <div class="section">
             <h2><i class="fas fa-tools"></i> Technical Skills</h2>
-            <div class="skills">
-              <div class="skill" onclick="skillDetails('java')">Java</div>
-              <div class="skill" onclick="skillDetails('python')">Python</div>
-              <div class="skill" onclick="skillDetails('javascript')">JavaScript</div>
-              <div class="skill" onclick="skillDetails('mysql')">MySQL</div>
-              <div class="skill" onclick="skillDetails('html')">HTML5</div>
-              <div class="skill" onclick="skillDetails('css')">CSS3</div>
-              <div class="skill" onclick="skillDetails('react')">React</div>
-              <div class="skill" onclick="skillDetails('nodejs')">Node.js</div>
-              <div class="skill" onclick="skillDetails('aws')">AWS</div>
-              <div class="skill" onclick="skillDetails('docker')">Docker</div>
-              <div class="skill" onclick="skillDetails('git')">Git</div>
-              <div class="skill" onclick="skillDetails('ai')">AI/ML</div>
+            <div class="skills-container">
+              
+              <div class="skill-category">
+                <h3><i class="fas fa-code"></i> Programming Languages</h3>
+                <div class="skills-grid">
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <div class="skill-icon" style="background: linear-gradient(135deg, #f89820, #ed8b00);">
+                        <i class="fab fa-java"></i>
+                      </div>
+                      <div class="skill-details">
+                        <div class="skill-name">Java</div>
+                        <div class="skill-progress">
+                          <div class="skill-progress-bar" style="width: 85%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="skill-level">85%</div>
+                  </div>
+                  
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <div class="skill-icon" style="background: linear-gradient(135deg, #3776ab, #306998);">
+                        <i class="fab fa-python"></i>
+                      </div>
+                      <div class="skill-details">
+                        <div class="skill-name">Python</div>
+                        <div class="skill-progress">
+                          <div class="skill-progress-bar" style="width: 90%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="skill-level">90%</div>
+                  </div>
+                  
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <div class="skill-icon" style="background: linear-gradient(135deg, #f0db4f, #e6cc00);">
+                        <i class="fab fa-js-square"></i>
+                      </div>
+                      <div class="skill-details">
+                        <div class="skill-name">JavaScript</div>
+                        <div class="skill-progress">
+                          <div class="skill-progress-bar" style="width: 80%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="skill-level">80%</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="skill-category">
+                <h3><i class="fas fa-desktop"></i> Web Technologies</h3>
+                <div class="skills-grid">
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <div class="skill-icon" style="background: linear-gradient(135deg, #e34c26, #d63384);">
+                        <i class="fab fa-html5"></i>
+                      </div>
+                      <div class="skill-details">
+                        <div class="skill-name">HTML5</div>
+                        <div class="skill-progress">
+                          <div class="skill-progress-bar" style="width: 95%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="skill-level">95%</div>
+                  </div>
+                  
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <div class="skill-icon" style="background: linear-gradient(135deg, #1572b6, #0c5aa6);">
+                        <i class="fab fa-css3-alt"></i>
+                      </div>
+                      <div class="skill-details">
+                        <div class="skill-name">CSS3</div>
+                        <div class="skill-progress">
+                          <div class="skill-progress-bar" style="width: 90%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="skill-level">90%</div>
+                  </div>
+                  
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <div class="skill-icon" style="background: linear-gradient(135deg, #61dafb, #21a9c7);">
+                        <i class="fab fa-react"></i>
+                      </div>
+                      <div class="skill-details">
+                        <div class="skill-name">React</div>
+                        <div class="skill-progress">
+                          <div class="skill-progress-bar" style="width: 75%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="skill-level">75%</div>
+                  </div>
+                  
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <div class="skill-icon" style="background: linear-gradient(135deg, #68a063, #5d8f5a);">
+                        <i class="fab fa-node-js"></i>
+                      </div>
+                      <div class="skill-details">
+                        <div class="skill-name">Node.js</div>
+                        <div class="skill-progress">
+                          <div class="skill-progress-bar" style="width: 70%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="skill-level">70%</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="skill-category">
+                <h3><i class="fas fa-cloud"></i> Cloud & DevOps</h3>
+                <div class="skills-grid">
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <div class="skill-icon" style="background: linear-gradient(135deg, #ff9900, #e88b00);">
+                        <i class="fab fa-aws"></i>
+                      </div>
+                      <div class="skill-details">
+                        <div class="skill-name">AWS</div>
+                        <div class="skill-progress">
+                          <div class="skill-progress-bar" style="width: 80%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="skill-level">80%</div>
+                  </div>
+                  
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <div class="skill-icon" style="background: linear-gradient(135deg, #0db7ed, #0a96c7);">
+                        <i class="fab fa-docker"></i>
+                      </div>
+                      <div class="skill-details">
+                        <div class="skill-name">Docker</div>
+                        <div class="skill-progress">
+                          <div class="skill-progress-bar" style="width: 75%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="skill-level">75%</div>
+                  </div>
+                  
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <div class="skill-icon" style="background: linear-gradient(135deg, #f05032, #d63384);">
+                        <i class="fab fa-git-alt"></i>
+                      </div>
+                      <div class="skill-details">
+                        <div class="skill-name">Git</div>
+                        <div class="skill-progress">
+                          <div class="skill-progress-bar" style="width: 85%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="skill-level">85%</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="skill-category">
+                <h3><i class="fas fa-database"></i> Databases & AI</h3>
+                <div class="skills-grid">
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <div class="skill-icon" style="background: linear-gradient(135deg, #00758f, #005a6b);">
+                        <i class="fas fa-database"></i>
+                      </div>
+                      <div class="skill-details">
+                        <div class="skill-name">MySQL</div>
+                        <div class="skill-progress">
+                          <div class="skill-progress-bar" style="width: 82%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="skill-level">82%</div>
+                  </div>
+                  
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <div class="skill-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                        <i class="fas fa-brain"></i>
+                      </div>
+                      <div class="skill-details">
+                        <div class="skill-name">AI/ML</div>
+                        <div class="skill-progress">
+                          <div class="skill-progress-bar" style="width: 78%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="skill-level">78%</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -601,43 +1145,132 @@
           <div class="section">
             <h2><i class="fas fa-building"></i> Professional Experience</h2>
             
-            <div class="experience-item">
-              <h3>Software Development Intern</h3>
-              <div class="date">June 2023 - Present</div>
-              <p>Developing web applications using modern frameworks and contributing to AI-powered features for customer analytics platform.</p>
-            </div>
+            <div class="experience-timeline">
+              <div class="experience-item">
+                <div class="experience-header">
+                  <div>
+                    <h3>Software Development Intern</h3>
+                    <div class="experience-company">Tech Innovation Labs</div>
+                  </div>
+                  <div class="date">June 2023 - Present</div>
+                </div>
+                <p>Developing web applications using modern frameworks and contributing to AI-powered features for customer analytics platform. Working with React, Node.js, and Python to build scalable solutions.</p>
+              </div>
 
-            <div class="experience-item">
-              <h3>Freelance Web Developer</h3>
-              <div class="date">January 2023 - May 2023</div>
-              <p>Created responsive websites for local businesses using HTML, CSS, JavaScript, and integrated payment systems.</p>
-            </div>
+              <div class="experience-item">
+                <div class="experience-header">
+                  <div>
+                    <h3>Freelance Web Developer</h3>
+                    <div class="experience-company">Independent</div>
+                  </div>
+                  <div class="date">January 2023 - May 2023</div>
+                </div>
+                <p>Created responsive websites for local businesses using HTML, CSS, JavaScript, and integrated payment systems. Delivered 5+ projects with 100% client satisfaction rate.</p>
+              </div>
 
-            <div class="experience-item">
-              <h3>Computer Science Student</h3>
-              <div class="date">September 2021 - Present</div>
-              <p>Pursuing Bachelor's degree with focus on Artificial Intelligence, Cloud Computing, and Software Engineering principles.</p>
+              <div class="experience-item">
+                <div class="experience-header">
+                  <div>
+                    <h3>Computer Science Student</h3>
+                    <div class="experience-company">RGPV University</div>
+                  </div>
+                  <div class="date">September 2021 - Present</div>
+                </div>
+                <p>Pursuing Bachelor's degree with focus on Artificial Intelligence, Cloud Computing, and Software Engineering principles. Current CGPA: 8.5/10</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Call to Action Section -->
-    <div class="action-section" id="contact">
+    <!-- Enhanced Contact Section -->
+    <div class="contact-section" id="contact">
       <h2><i class="fas fa-handshake"></i> Let's Work Together</h2>
       <p>I'm always interested in new opportunities and exciting projects. Let's connect and discuss how we can collaborate!</p>
       
-      <div class="action-buttons">
-        <button class="btn btn-primary" onclick="scheduleCall()">
-          <i class="fas fa-calendar-alt"></i> Schedule a Call
-        </button>
-        <button class="btn btn-secondary" onclick="sendEmail()">
-          <i class="fas fa-envelope"></i> Send Message
-        </button>
-        <button class="btn btn-outline" onclick="downloadResume()">
-          <i class="fas fa-file-pdf"></i> Download Resume
-        </button>
+      <div class="contact-grid">
+        <div class="contact-form">
+          <h3>Send me a message</h3>
+          <!-- TODO: Replace the action URL with your actual form handler -->
+          <!-- You can use services like Formspree, Netlify Forms, or your own backend -->
+          <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <div class="form-group">
+              <label for="name">Name *</label>
+              <input type="text" id="name" name="name" class="form-control" required>
+              <div class="error-message" id="nameError"></div>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" class="form-control" required>
+              <div class="error-message" id="emailError"></div>
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">Subject *</label>
+              <input type="text" id="subject" name="subject" class="form-control" required>
+              <div class="error-message" id="subjectError"></div>
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
+              <div class="error-message" id="messageError"></div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+          
+          <div id="formMessage"></div>
+        </div>
+        
+        <div class="contact-info-section">
+          <h3>Get in touch</h3>
+          
+          <div class="contact-method">
+            <div class="contact-icon" style="background: linear-gradient(135deg, #ea4335, #c23321);">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-details">
+              <h4>Email</h4>
+              <p>anupkrvarma2222@gmail.com</p>
+            </div>
+          </div>
+          
+          <div class="contact-method">
+            <div class="contact-icon" style="background: linear-gradient(135deg, #25d366, #128c7e);">
+              <i class="fas fa-phone"></i>
+            </div>
+            <div class="contact-details">
+              <h4>Phone</h4>
+              <p>+9176678.....</p>
+            </div>
+          </div>
+          
+          <div class="contact-method">
+            <div class="contact-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="contact-details">
+              <h4>Location</h4>
+              <p>Bhopal, MP, India</p>
+            </div>
+          </div>
+          
+          <div class="contact-method">
+            <div class="contact-icon" style="background: linear-gradient(135deg, #0077b5, #005885);">
+              <i class="fab fa-linkedin"></i>
+            </div>
+            <div class="contact-details">
+              <h4>LinkedIn</h4>
+              <!-- TODO: Replace with your actual LinkedIn profile -->
+              <p><a href="#" style="color: #667eea; text-decoration: none;">Connect with me</a></p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -658,6 +1291,21 @@
       
       // Add active class to clicked button
       event.target.classList.add('active');
+
+      // Animate skill bars when skills tab is opened
+      if (tabName === 'skills') {
+        animateSkillBars();
+      }
+    }
+
+    // Animate skill progress bars
+    function animateSkillBars() {
+      const skillBars = document.querySelectorAll('.skill-progress-bar');
+      skillBars.forEach((bar, index) => {
+        setTimeout(() => {
+          bar.style.width = bar.style.width || '0%';
+        }, index * 100);
+      });
     }
 
     // Smooth scrolling
@@ -669,58 +1317,125 @@
       });
     }
 
-    // Project actions
-    function viewProject(projectId) {
-      alert(`Opening ${projectId} project details...`);
-      // In a real implementation, this would navigate to project page
+    // Form validation and submission
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Clear previous errors
+      clearErrors();
+      
+      // Validate form
+      if (validateForm()) {
+        submitForm();
+      }
+    });
+
+    function validateForm() {
+      let isValid = true;
+      
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      const message = document.getElementById('message').value.trim();
+      
+      if (!name) {
+        showError('nameError', 'Name is required');
+        isValid = false;
+      }
+      
+      if (!email) {
+        showError('emailError', 'Email is required');
+        isValid = false;
+      } else if (!isValidEmail(email)) {
+        showError('emailError', 'Please enter a valid email address');
+        isValid = false;
+      }
+      
+      if (!subject) {
+        showError('subjectError', 'Subject is required');
+        isValid = false;
+      }
+      
+      if (!message) {
+        showError('messageError', 'Message is required');
+        isValid = false;
+      } else if (message.length < 10) {
+        showError('messageError', 'Message must be at least 10 characters long');
+        isValid = false;
+      }
+      
+      return isValid;
     }
 
-    function viewDemo(projectId) {
-      alert(`Launching ${projectId} live demo...`);
-      // In a real implementation, this would open the demo URL
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
     }
 
-    function viewCode(projectId) {
-      alert(`Opening ${projectId} source code on GitHub...`);
-      // In a real implementation, this would open GitHub repository
+    function showError(elementId, message) {
+      const errorElement = document.getElementById(elementId);
+      const inputElement = errorElement.previousElementSibling;
+      
+      errorElement.textContent = message;
+      inputElement.classList.add('error');
     }
 
-    // Skill details
-    function skillDetails(skill) {
-      alert(`Showing ${skill} proficiency and projects...`);
-      // In a real implementation, this would show skill details modal
+    function clearErrors() {
+      const errorElements = document.querySelectorAll('.error-message');
+      const inputElements = document.querySelectorAll('.form-control');
+      
+      errorElements.forEach(element => element.textContent = '');
+      inputElements.forEach(element => element.classList.remove('error'));
     }
 
-    // Social and contact actions
-    function openLinkedIn() {
-      alert('Opening LinkedIn profile...');
-      // window.open('https://linkedin.com/in/anupkumarvarma', '_blank');
+    function submitForm() {
+      const formMessage = document.getElementById('formMessage');
+      const submitButton = document.querySelector('#contactForm button[type="submit"]');
+      
+      // Show loading state
+      submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      submitButton.disabled = true;
+      
+      // TODO: Implement actual form submission
+      // For now, we'll simulate a successful submission
+      setTimeout(() => {
+        formMessage.innerHTML = '<div class="message success"><i class="fas fa-check-circle"></i> Thank you! Your message has been sent successfully. I\'ll get back to you soon.</div>';
+        
+        // Reset form
+        document.getElementById('contactForm').reset();
+        
+        // Reset button
+        submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+        submitButton.disabled = false;
+        
+        // Hide message after 5 seconds
+        setTimeout(() => {
+          formMessage.innerHTML = '';
+        }, 5000);
+      }, 2000);
     }
 
-    function openGitHub() {
-      alert('Opening GitHub profile...');
-      // window.open('https://github.com/anupkumarvarma', '_blank');
-    }
-
-    function sendEmail() {
-      alert('Opening email client...');
-      // window.location.href = 'mailto:anup@example.com?subject=Portfolio Contact';
-    }
-
+    // Resume download function
     function downloadResume() {
-      alert('Downloading resume PDF...');
-      // In a real implementation, this would download the actual resume file
+      // TODO: Replace with actual resume file path
+      // For now, show an alert
+      alert('Resume download feature coming soon! Please contact me directly for my resume.');
+      
+      // Example of how to implement actual download:
+      // const link = document.createElement('a');
+      // link.href = 'path/to/your/resume.pdf';
+      // link.download = 'Anup_Kumar_Varma_Resume.pdf';
+      // link.click();
     }
 
-    function scheduleCall() {
-      alert('Opening calendar scheduling system...');
-      // In a real implementation, this would open Calendly or similar service
-    }
-
-    // Add smooth scrolling for navigation
+    // Initialize animations on page load
     document.addEventListener('DOMContentLoaded', function() {
-      // Add any additional initialization here
       console.log('Portfolio loaded successfully!');
+      
+      // Animate skill bars if skills tab is initially active
+      if (document.getElementById('skills').classList.contains('active')) {
+        animateSkillBars();
+      }
     });
 
     // Add keyboard navigation
@@ -729,6 +1444,25 @@
         // Close any open modals or return to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = 'fadeIn 0.6s ease forwards';
+        }
+      });
+    }, observerOptions);
+
+    // Observe elements for animation
+    document.querySelectorAll('.project, .experience-item, .skill-category').forEach(el => {
+      observer.observe(el);
     });
   </script>
 </body>
