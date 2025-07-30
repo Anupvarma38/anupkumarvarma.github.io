@@ -292,6 +292,25 @@
       background: #667eea;
     }
 
+    .auto-cycle-btn {
+      padding: 0.75rem 1.2rem;
+      border: none;
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      color: white;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      margin-left: auto;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+    }
+
+    .auto-cycle-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    }
+
     .tab-content {
       display: none;
     }
@@ -898,6 +917,9 @@
           <button class="tab-btn" onclick="showTab('experience')">
             <i class="fas fa-briefcase"></i> Experience
           </button>
+          <button id="auto-cycle-toggle" class="auto-cycle-btn" onclick="toggleAutoTabCycling()">
+            ⏸️ Pause Auto
+          </button>
         </div>
 
         <!-- Projects Tab -->
@@ -1330,7 +1352,18 @@
 
   <script>
     // Tab functionality
-    function showTab(tabName) {
+    let autoTabCycling = true;
+    let autoTabInterval = null;
+    const tabOrder = ['projects', 'skills', 'experience'];
+    let currentTabIndex = 0;
+
+    function showTab(tabName, fromAutoClick = false) {
+      // Reset auto-cycling interval when manually clicked
+      if (!fromAutoClick) {
+        stopAutoTabCycling();
+        setTimeout(() => startAutoTabCycling(), 1000); // Restart after 1 second
+      }
+
       // Hide all tab contents
       const tabContents = document.querySelectorAll('.tab-content');
       tabContents.forEach(content => content.classList.remove('active'));
@@ -1342,8 +1375,14 @@
       // Show selected tab content
       document.getElementById(tabName).classList.add('active');
       
-      // Add active class to clicked button
-      event.target.classList.add('active');
+      // Add active class to the corresponding button
+      const targetButton = document.querySelector(`[onclick="showTab('${tabName}')"]`);
+      if (targetButton) {
+        targetButton.classList.add('active');
+      }
+
+      // Update current tab index
+      currentTabIndex = tabOrder.indexOf(tabName);
 
       // Animate skill bars when skills tab is opened
       if (tabName === 'skills') {
@@ -1354,6 +1393,41 @@
       setTimeout(() => {
         initializeDragAndDrop();
       }, 100);
+    }
+
+    function startAutoTabCycling() {
+      if (autoTabInterval) return; // Already running
+      
+      autoTabInterval = setInterval(() => {
+        if (autoTabCycling) {
+          currentTabIndex = (currentTabIndex + 1) % tabOrder.length;
+          showTab(tabOrder[currentTabIndex], true);
+        }
+      }, 5000); // Change tab every 5 seconds
+    }
+
+    function stopAutoTabCycling() {
+      if (autoTabInterval) {
+        clearInterval(autoTabInterval);
+        autoTabInterval = null;
+      }
+    }
+
+    function toggleAutoTabCycling() {
+      autoTabCycling = !autoTabCycling;
+      const toggleBtn = document.getElementById('auto-cycle-toggle');
+      if (toggleBtn) {
+        toggleBtn.textContent = autoTabCycling ? '⏸️ Pause Auto' : '▶️ Start Auto';
+        toggleBtn.style.background = autoTabCycling ? 
+          'linear-gradient(135deg, #ff6b6b, #ee5a24)' : 
+          'linear-gradient(135deg, #667eea, #764ba2)';
+      }
+      
+      if (autoTabCycling) {
+        startAutoTabCycling();
+      } else {
+        stopAutoTabCycling();
+      }
     }
 
     // Animate skill progress bars
@@ -1710,6 +1784,28 @@
     document.querySelectorAll('.project, .experience-item, .skill-category').forEach(el => {
       observer.observe(el);
     });
+
+    // Initialize auto tab cycling when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Start auto-cycling after a short delay
+      setTimeout(() => {
+        startAutoTabCycling();
+      }, 3000); // Start after 3 seconds
+    });
+
+    // Pause auto-cycling when user hovers over the tabs area
+    const tabsContainer = document.querySelector('.section-tabs');
+    if (tabsContainer) {
+      tabsContainer.addEventListener('mouseenter', () => {
+        stopAutoTabCycling();
+      });
+      
+      tabsContainer.addEventListener('mouseleave', () => {
+        if (autoTabCycling) {
+          setTimeout(() => startAutoTabCycling(), 1000);
+        }
+      });
+    }
   </script>
 </body>
 </html>
