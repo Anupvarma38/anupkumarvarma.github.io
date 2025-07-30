@@ -6,6 +6,7 @@
   <title>Anup Kumar Varma | Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -303,6 +304,58 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Drag and Drop Styles */
+    .sortable-ghost {
+      opacity: 0.4;
+      transform: scale(0.95);
+      background: rgba(102, 126, 234, 0.1) !important;
+      border: 2px dashed #667eea !important;
+    }
+
+    .sortable-chosen {
+      cursor: grabbing !important;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+      transform: rotate(2deg);
+      z-index: 1000;
+    }
+
+    .sortable-drag {
+      opacity: 1;
+      transform: rotate(5deg) !important;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .project, .experience-item, .skill-category, .skill-item {
+      cursor: grab;
+      transition: all 0.3s ease;
+    }
+
+    .project:hover, .experience-item:hover, .skill-category:hover, .skill-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Drag handles for skills categories */
+    .skill-category h3 {
+      cursor: grab;
+      position: relative;
+    }
+
+    .skill-category h3::before {
+      content: "⋮⋮";
+      position: absolute;
+      left: -20px;
+      color: #999;
+      font-size: 16px;
+      line-height: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .skill-category:hover h3::before {
+      opacity: 1;
     }
 
     .section h2 {
@@ -850,7 +903,7 @@
         <!-- Projects Tab -->
         <div id="projects" class="tab-content active">
           <div class="section">
-            <h2><i class="fas fa-project-diagram"></i> Featured Projects</h2>
+            <h2><i class="fas fa-project-diagram"></i> Featured Projects <span style="font-size: 0.8rem; color: #666; font-weight: normal;">(Drag to reorder)</span></h2>
             
             <div class="projects-grid">
               <div class="project">
@@ -934,7 +987,7 @@
         <!-- Skills Tab -->
         <div id="skills" class="tab-content">
           <div class="section">
-            <h2><i class="fas fa-tools"></i> Technical Skills</h2>
+            <h2><i class="fas fa-tools"></i> Technical Skills <span style="font-size: 0.8rem; color: #666; font-weight: normal;">(Drag categories and skills to reorder)</span></h2>
             <div class="skills-container">
               
               <div class="skill-category">
@@ -1143,7 +1196,7 @@
         <!-- Experience Tab -->
         <div id="experience" class="tab-content">
           <div class="section">
-            <h2><i class="fas fa-building"></i> Professional Experience</h2>
+            <h2><i class="fas fa-building"></i> Professional Experience <span style="font-size: 0.8rem; color: #666; font-weight: normal;">(Drag to reorder)</span></h2>
             
             <div class="experience-timeline">
               <div class="experience-item">
@@ -1296,6 +1349,11 @@
       if (tabName === 'skills') {
         animateSkillBars();
       }
+
+      // Re-initialize drag and drop for the newly active tab
+      setTimeout(() => {
+        initializeDragAndDrop();
+      }, 100);
     }
 
     // Animate skill progress bars
@@ -1432,6 +1490,9 @@
     document.addEventListener('DOMContentLoaded', function() {
       console.log('Portfolio loaded successfully!');
       
+      // Initialize drag and drop functionality
+      initializeDragAndDrop();
+      
       // Animate skill bars if skills tab is initially active
       if (document.getElementById('skills').classList.contains('active')) {
         animateSkillBars();
@@ -1445,6 +1506,191 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
+
+    // Drag and Drop Functionality
+    let dragSortables = [];
+
+    function initializeDragAndDrop() {
+      // Destroy existing sortables first
+      dragSortables.forEach(sortable => {
+        if (sortable && sortable.destroy) {
+          sortable.destroy();
+        }
+      });
+      dragSortables = [];
+
+      // Projects drag and drop
+      const projectsGrid = document.querySelector('.projects-grid');
+      if (projectsGrid && !projectsGrid.sortable) {
+        const projectsSortable = Sortable.create(projectsGrid, {
+          animation: 300,
+          ghostClass: 'sortable-ghost',
+          chosenClass: 'sortable-chosen',
+          dragClass: 'sortable-drag',
+          onEnd: function() {
+            saveOrder('projects', Array.from(projectsGrid.children).map(el => el.querySelector('h3').textContent));
+            showDragFeedback('Projects reordered!');
+          }
+        });
+        dragSortables.push(projectsSortable);
+      }
+
+      // Experience drag and drop
+      const experienceTimeline = document.querySelector('.experience-timeline');
+      if (experienceTimeline && !experienceTimeline.sortable) {
+        const experienceSortable = Sortable.create(experienceTimeline, {
+          animation: 300,
+          ghostClass: 'sortable-ghost',
+          chosenClass: 'sortable-chosen',
+          dragClass: 'sortable-drag',
+          onEnd: function() {
+            saveOrder('experience', Array.from(experienceTimeline.children).map(el => el.querySelector('h3').textContent));
+            showDragFeedback('Experience reordered!');
+          }
+        });
+        dragSortables.push(experienceSortable);
+      }
+
+      // Skills categories drag and drop
+      const skillsContainer = document.querySelector('.skills-container');
+      if (skillsContainer && !skillsContainer.sortable) {
+        const skillsCategorySortable = Sortable.create(skillsContainer, {
+          animation: 300,
+          ghostClass: 'sortable-ghost',
+          chosenClass: 'sortable-chosen',
+          dragClass: 'sortable-drag',
+          handle: '.skill-category h3',
+          onEnd: function() {
+            saveOrder('skillsCategories', Array.from(skillsContainer.children).map(el => el.querySelector('h3').textContent));
+            showDragFeedback('Skill categories reordered!');
+          }
+        });
+        dragSortables.push(skillsCategorySortable);
+
+        // Individual skills within each category
+        const skillsGrids = document.querySelectorAll('.skills-grid');
+        skillsGrids.forEach((grid, index) => {
+          if (!grid.sortable) {
+            const skillItemsSortable = Sortable.create(grid, {
+              animation: 300,
+              ghostClass: 'sortable-ghost',
+              chosenClass: 'sortable-chosen',
+              dragClass: 'sortable-drag',
+              onEnd: function() {
+                const categoryName = grid.closest('.skill-category').querySelector('h3').textContent;
+                saveOrder(`skills_${index}`, Array.from(grid.children).map(el => el.querySelector('.skill-name').textContent));
+                showDragFeedback(`${categoryName} skills reordered!`);
+              }
+            });
+            dragSortables.push(skillItemsSortable);
+          }
+        });
+      }
+
+      // Load saved order
+      loadSavedOrder();
+    }
+
+    function saveOrder(key, order) {
+      localStorage.setItem(`portfolio_order_${key}`, JSON.stringify(order));
+    }
+
+    function loadSavedOrder() {
+      // Load projects order
+      const projectsOrder = JSON.parse(localStorage.getItem('portfolio_order_projects') || '[]');
+      if (projectsOrder.length > 0) {
+        reorderElements('.projects-grid .project', projectsOrder, 'h3');
+      }
+
+      // Load experience order
+      const experienceOrder = JSON.parse(localStorage.getItem('portfolio_order_experience') || '[]');
+      if (experienceOrder.length > 0) {
+        reorderElements('.experience-timeline .experience-item', experienceOrder, 'h3');
+      }
+
+      // Load skills categories order
+      const skillsCategoriesOrder = JSON.parse(localStorage.getItem('portfolio_order_skillsCategories') || '[]');
+      if (skillsCategoriesOrder.length > 0) {
+        reorderElements('.skills-container .skill-category', skillsCategoriesOrder, 'h3');
+      }
+
+      // Load individual skills order
+      const skillsGrids = document.querySelectorAll('.skills-grid');
+      skillsGrids.forEach((grid, index) => {
+        const skillsOrder = JSON.parse(localStorage.getItem(`portfolio_order_skills_${index}`) || '[]');
+        if (skillsOrder.length > 0) {
+          const skillItems = grid.querySelectorAll('.skill-item');
+          reorderElementsInContainer(grid, skillItems, skillsOrder, '.skill-name');
+        }
+      });
+    }
+
+    function reorderElements(selector, order, titleSelector) {
+      const elements = document.querySelectorAll(selector);
+      const container = elements[0]?.parentNode;
+      if (!container) return;
+
+      const elementsMap = new Map();
+      elements.forEach(el => {
+        const title = el.querySelector(titleSelector)?.textContent?.trim();
+        if (title) elementsMap.set(title, el);
+      });
+
+      // Reorder based on saved order
+      order.forEach(title => {
+        const element = elementsMap.get(title);
+        if (element) {
+          container.appendChild(element);
+        }
+      });
+    }
+
+    function reorderElementsInContainer(container, elements, order, titleSelector) {
+      const elementsMap = new Map();
+      elements.forEach(el => {
+        const title = el.querySelector(titleSelector)?.textContent?.trim();
+        if (title) elementsMap.set(title, el);
+      });
+
+      // Reorder based on saved order
+      order.forEach(title => {
+        const element = elementsMap.get(title);
+        if (element) {
+          container.appendChild(element);
+        }
+      });
+    }
+
+    function showDragFeedback(message) {
+      // Create or update feedback element
+      let feedback = document.getElementById('drag-feedback');
+      if (!feedback) {
+        feedback = document.createElement('div');
+        feedback.id = 'drag-feedback';
+        feedback.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          color: white;
+          padding: 12px 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+          z-index: 10000;
+          font-weight: 500;
+          transform: translateX(400px);
+          transition: transform 0.3s ease;
+        `;
+        document.body.appendChild(feedback);
+      }
+
+      feedback.textContent = message;
+      feedback.style.transform = 'translateX(0)';
+
+      setTimeout(() => {
+        feedback.style.transform = 'translateX(400px)';
+      }, 2000);
+    }
 
     // Intersection Observer for animations
     const observerOptions = {
