@@ -292,6 +292,25 @@
       background: #667eea;
     }
 
+    .scroll-nav-btn {
+      padding: 0.75rem 1.2rem;
+      border: none;
+      background: linear-gradient(135deg, #10ac84, #00d2d3);
+      color: white;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      margin-left: auto;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 8px rgba(16, 172, 132, 0.3);
+    }
+
+    .scroll-nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(16, 172, 132, 0.4);
+    }
+
     .tab-content {
       display: none;
     }
@@ -898,6 +917,9 @@
           <button class="tab-btn" onclick="showTab('experience')">
             <i class="fas fa-briefcase"></i> Experience
           </button>
+          <button id="scroll-nav-toggle" class="scroll-nav-btn" onclick="toggleScrollNavigation()">
+            📜 Scroll Nav ON
+          </button>
         </div>
 
         <!-- Projects Tab -->
@@ -1329,8 +1351,12 @@
   </div>
 
   <script>
-    // Tab functionality
-    function showTab(tabName) {
+    // Tab functionality with scroll-based navigation
+    let isScrollBasedNavigation = true;
+    let currentActiveTab = 'projects';
+    const tabOrder = ['projects', 'skills', 'experience'];
+
+    function showTab(tabName, fromScroll = false) {
       // Hide all tab contents
       const tabContents = document.querySelectorAll('.tab-content');
       tabContents.forEach(content => content.classList.remove('active'));
@@ -1342,8 +1368,14 @@
       // Show selected tab content
       document.getElementById(tabName).classList.add('active');
       
-      // Add active class to clicked button
-      event.target.classList.add('active');
+      // Add active class to the corresponding button
+      const targetButton = document.querySelector(`[onclick="showTab('${tabName}')"]`);
+      if (targetButton) {
+        targetButton.classList.add('active');
+      }
+
+      // Update current active tab
+      currentActiveTab = tabName;
 
       // Animate skill bars when skills tab is opened
       if (tabName === 'skills') {
@@ -1354,6 +1386,91 @@
       setTimeout(() => {
         initializeDragAndDrop();
       }, 100);
+
+      // If manually clicked, temporarily disable scroll-based navigation
+      if (!fromScroll) {
+        isScrollBasedNavigation = false;
+        setTimeout(() => {
+          isScrollBasedNavigation = true;
+        }, 3000); // Re-enable after 3 seconds
+      }
+    }
+
+    // Scroll-based tab switching
+    function handleScrollNavigation() {
+      if (!isScrollBasedNavigation) return;
+
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      
+      // Calculate scroll percentage
+      const scrollPercentage = scrollY / (documentHeight - windowHeight);
+      
+      let targetTab;
+      
+      // Determine which tab should be active based on scroll position
+      if (scrollPercentage < 0.33) {
+        targetTab = 'projects';
+      } else if (scrollPercentage < 0.66) {
+        targetTab = 'skills';
+      } else {
+        targetTab = 'experience';
+      }
+
+      // Only switch if it's different from current tab
+      if (targetTab !== currentActiveTab) {
+        showTab(targetTab, true);
+        
+        // Show scroll feedback
+        showScrollFeedback(`Switched to ${targetTab.charAt(0).toUpperCase() + targetTab.slice(1)}`);
+      }
+    }
+
+    // Toggle scroll-based navigation
+    function toggleScrollNavigation() {
+      isScrollBasedNavigation = !isScrollBasedNavigation;
+      const toggleBtn = document.getElementById('scroll-nav-toggle');
+      if (toggleBtn) {
+        toggleBtn.textContent = isScrollBasedNavigation ? '📜 Scroll Nav ON' : '🚫 Scroll Nav OFF';
+        toggleBtn.style.background = isScrollBasedNavigation ? 
+          'linear-gradient(135deg, #10ac84, #00d2d3)' : 
+          'linear-gradient(135deg, #ff6b6b, #ee5a24)';
+      }
+    }
+
+    // Show scroll feedback
+    function showScrollFeedback(message) {
+      let feedback = document.getElementById('scroll-feedback');
+      if (!feedback) {
+        feedback = document.createElement('div');
+        feedback.id = 'scroll-feedback';
+        feedback.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: rgba(102, 126, 234, 0.95);
+          color: white;
+          padding: 15px 25px;
+          border-radius: 25px;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+          z-index: 10000;
+          font-weight: 600;
+          font-size: 1.1rem;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          backdrop-filter: blur(10px);
+        `;
+        document.body.appendChild(feedback);
+      }
+
+      feedback.textContent = message;
+      feedback.style.opacity = '1';
+
+      setTimeout(() => {
+        feedback.style.opacity = '0';
+      }, 1500);
     }
 
     // Animate skill progress bars
@@ -1709,6 +1826,28 @@
     // Observe elements for animation
     document.querySelectorAll('.project, .experience-item, .skill-category').forEach(el => {
       observer.observe(el);
+    });
+
+    // Initialize scroll-based navigation when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add scroll event listener
+      let scrollTimeout;
+      window.addEventListener('scroll', () => {
+        // Throttle scroll events for better performance
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(handleScrollNavigation, 50);
+      });
+
+      // Initial call to set correct tab based on current scroll position
+      setTimeout(() => {
+        handleScrollNavigation();
+      }, 500);
+    });
+
+    // Add wheel event for smoother detection
+    window.addEventListener('wheel', (e) => {
+      // Small delay to allow smooth scrolling to complete
+      setTimeout(handleScrollNavigation, 100);
     });
   </script>
 </body>
