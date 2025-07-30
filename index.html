@@ -292,10 +292,10 @@
       background: #667eea;
     }
 
-    .auto-cycle-btn {
+    .scroll-nav-btn {
       padding: 0.75rem 1.2rem;
       border: none;
-      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      background: linear-gradient(135deg, #10ac84, #00d2d3);
       color: white;
       font-weight: 500;
       cursor: pointer;
@@ -303,12 +303,12 @@
       transition: all 0.3s ease;
       margin-left: auto;
       font-size: 0.9rem;
-      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+      box-shadow: 0 2px 8px rgba(16, 172, 132, 0.3);
     }
 
-    .auto-cycle-btn:hover {
+    .scroll-nav-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      box-shadow: 0 4px 15px rgba(16, 172, 132, 0.4);
     }
 
     .tab-content {
@@ -917,8 +917,8 @@
           <button class="tab-btn" onclick="showTab('experience')">
             <i class="fas fa-briefcase"></i> Experience
           </button>
-          <button id="auto-cycle-toggle" class="auto-cycle-btn" onclick="toggleAutoTabCycling()">
-            ⏸️ Pause Auto
+          <button id="scroll-nav-toggle" class="scroll-nav-btn" onclick="toggleScrollNavigation()">
+            📜 Scroll Nav ON
           </button>
         </div>
 
@@ -1351,19 +1351,12 @@
   </div>
 
   <script>
-    // Tab functionality
-    let autoTabCycling = true;
-    let autoTabInterval = null;
+    // Tab functionality with scroll-based navigation
+    let isScrollBasedNavigation = true;
+    let currentActiveTab = 'projects';
     const tabOrder = ['projects', 'skills', 'experience'];
-    let currentTabIndex = 0;
 
-    function showTab(tabName, fromAutoClick = false) {
-      // Reset auto-cycling interval when manually clicked
-      if (!fromAutoClick) {
-        stopAutoTabCycling();
-        setTimeout(() => startAutoTabCycling(), 1000); // Restart after 1 second
-      }
-
+    function showTab(tabName, fromScroll = false) {
       // Hide all tab contents
       const tabContents = document.querySelectorAll('.tab-content');
       tabContents.forEach(content => content.classList.remove('active'));
@@ -1381,8 +1374,8 @@
         targetButton.classList.add('active');
       }
 
-      // Update current tab index
-      currentTabIndex = tabOrder.indexOf(tabName);
+      // Update current active tab
+      currentActiveTab = tabName;
 
       // Animate skill bars when skills tab is opened
       if (tabName === 'skills') {
@@ -1393,41 +1386,91 @@
       setTimeout(() => {
         initializeDragAndDrop();
       }, 100);
-    }
 
-    function startAutoTabCycling() {
-      if (autoTabInterval) return; // Already running
-      
-      autoTabInterval = setInterval(() => {
-        if (autoTabCycling) {
-          currentTabIndex = (currentTabIndex + 1) % tabOrder.length;
-          showTab(tabOrder[currentTabIndex], true);
-        }
-      }, 5000); // Change tab every 5 seconds
-    }
-
-    function stopAutoTabCycling() {
-      if (autoTabInterval) {
-        clearInterval(autoTabInterval);
-        autoTabInterval = null;
+      // If manually clicked, temporarily disable scroll-based navigation
+      if (!fromScroll) {
+        isScrollBasedNavigation = false;
+        setTimeout(() => {
+          isScrollBasedNavigation = true;
+        }, 3000); // Re-enable after 3 seconds
       }
     }
 
-    function toggleAutoTabCycling() {
-      autoTabCycling = !autoTabCycling;
-      const toggleBtn = document.getElementById('auto-cycle-toggle');
-      if (toggleBtn) {
-        toggleBtn.textContent = autoTabCycling ? '⏸️ Pause Auto' : '▶️ Start Auto';
-        toggleBtn.style.background = autoTabCycling ? 
-          'linear-gradient(135deg, #ff6b6b, #ee5a24)' : 
-          'linear-gradient(135deg, #667eea, #764ba2)';
-      }
+    // Scroll-based tab switching
+    function handleScrollNavigation() {
+      if (!isScrollBasedNavigation) return;
+
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
       
-      if (autoTabCycling) {
-        startAutoTabCycling();
+      // Calculate scroll percentage
+      const scrollPercentage = scrollY / (documentHeight - windowHeight);
+      
+      let targetTab;
+      
+      // Determine which tab should be active based on scroll position
+      if (scrollPercentage < 0.33) {
+        targetTab = 'projects';
+      } else if (scrollPercentage < 0.66) {
+        targetTab = 'skills';
       } else {
-        stopAutoTabCycling();
+        targetTab = 'experience';
       }
+
+      // Only switch if it's different from current tab
+      if (targetTab !== currentActiveTab) {
+        showTab(targetTab, true);
+        
+        // Show scroll feedback
+        showScrollFeedback(`Switched to ${targetTab.charAt(0).toUpperCase() + targetTab.slice(1)}`);
+      }
+    }
+
+    // Toggle scroll-based navigation
+    function toggleScrollNavigation() {
+      isScrollBasedNavigation = !isScrollBasedNavigation;
+      const toggleBtn = document.getElementById('scroll-nav-toggle');
+      if (toggleBtn) {
+        toggleBtn.textContent = isScrollBasedNavigation ? '📜 Scroll Nav ON' : '🚫 Scroll Nav OFF';
+        toggleBtn.style.background = isScrollBasedNavigation ? 
+          'linear-gradient(135deg, #10ac84, #00d2d3)' : 
+          'linear-gradient(135deg, #ff6b6b, #ee5a24)';
+      }
+    }
+
+    // Show scroll feedback
+    function showScrollFeedback(message) {
+      let feedback = document.getElementById('scroll-feedback');
+      if (!feedback) {
+        feedback = document.createElement('div');
+        feedback.id = 'scroll-feedback';
+        feedback.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: rgba(102, 126, 234, 0.95);
+          color: white;
+          padding: 15px 25px;
+          border-radius: 25px;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+          z-index: 10000;
+          font-weight: 600;
+          font-size: 1.1rem;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          backdrop-filter: blur(10px);
+        `;
+        document.body.appendChild(feedback);
+      }
+
+      feedback.textContent = message;
+      feedback.style.opacity = '1';
+
+      setTimeout(() => {
+        feedback.style.opacity = '0';
+      }, 1500);
     }
 
     // Animate skill progress bars
@@ -1785,27 +1828,27 @@
       observer.observe(el);
     });
 
-    // Initialize auto tab cycling when page loads
+    // Initialize scroll-based navigation when page loads
     document.addEventListener('DOMContentLoaded', function() {
-      // Start auto-cycling after a short delay
+      // Add scroll event listener
+      let scrollTimeout;
+      window.addEventListener('scroll', () => {
+        // Throttle scroll events for better performance
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(handleScrollNavigation, 50);
+      });
+
+      // Initial call to set correct tab based on current scroll position
       setTimeout(() => {
-        startAutoTabCycling();
-      }, 3000); // Start after 3 seconds
+        handleScrollNavigation();
+      }, 500);
     });
 
-    // Pause auto-cycling when user hovers over the tabs area
-    const tabsContainer = document.querySelector('.section-tabs');
-    if (tabsContainer) {
-      tabsContainer.addEventListener('mouseenter', () => {
-        stopAutoTabCycling();
-      });
-      
-      tabsContainer.addEventListener('mouseleave', () => {
-        if (autoTabCycling) {
-          setTimeout(() => startAutoTabCycling(), 1000);
-        }
-      });
-    }
+    // Add wheel event for smoother detection
+    window.addEventListener('wheel', (e) => {
+      // Small delay to allow smooth scrolling to complete
+      setTimeout(handleScrollNavigation, 100);
+    });
   </script>
 </body>
 </html>
